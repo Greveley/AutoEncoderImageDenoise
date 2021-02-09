@@ -71,7 +71,7 @@ def autoencoder(type, start_filters=8, kernel=(3,3)):
         model.add(Conv2D(1,(3,3),activation='sigmoid',padding='same'))
 
     elif type=="Unet":
-
+# LHS of UNET
         conv1 = Conv2D(start_filters * 1, (3, 3), activation="relu", padding="same")(input_layer)
         conv1 = Conv2D(start_filters * 1, (3, 3), activation="relu", padding="same")(conv1)
         pool1 = MaxPooling2D((2, 2))(conv1)
@@ -91,11 +91,10 @@ def autoencoder(type, start_filters=8, kernel=(3,3)):
         conv4 = Conv2D(start_filters * 4, (3, 3), activation="relu", padding="same")(conv4)
         pool4 = MaxPooling2D((2, 2))(conv3)
         pool4 = Dropout(0.5)(pool3)
-
-        # Middle
+# Middle
         convm = Conv2D(start_filters * 16, (3, 3), activation="relu", padding="same")(pool4)
         convm = Conv2D(start_filters * 16, (3, 3), activation="relu", padding="same")(convm)
-
+# RHS of UNET
         deconv4 = Conv2DTranspose(start_filters * 8, (3, 3), padding="same")(convm)
         uconv4 = concatenate([deconv4, conv4])
         uconv4 = Dropout(0.5)(uconv4)
@@ -124,8 +123,17 @@ def autoencoder(type, start_filters=8, kernel=(3,3)):
 
         model = Model(input_layer,output_layer)
 
-    #print(model.summary())
 
-    model.compile(optimizer = 'adam' , loss = "binary_crossentropy")
-    
+    elif type=="ANN":
+        model=Sequential()
+        model.add(Dense(784,activation ='relu',input_shape=(784,)))
+        model.add(Dense(256,activation ='relu'))
+        model.add(Dense(128,activation ='relu'))
+        model.add(Dense(64,activation ='relu'))
+        model.add(Dense(64,activation ='relu'))
+        model.add(Dense(128,activation ='relu'))
+        model.add(Dense(256,activation ='relu'))
+        model.add(Dense(784,activation ='sigmoid'))
+
+             
     return model
