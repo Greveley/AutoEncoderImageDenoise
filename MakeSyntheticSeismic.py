@@ -4,17 +4,16 @@ from pylops.utils.seismicevents import makeaxis, linear2d
 from pylops.utils.wavelets import ricker
 import random
 
-def MakeSeismic(samples, noise_level=0.3 ):
+def MakeSeismic(samples):
 
     """Simple generation of noisy synthetic linear seismic events. 
         Input:
         samples =  Number of samples in your dataset you want
-        noise_level = Guassian noise level that gets added to seismic
         
         Output: 
         clean_signal, noise, noisy_signal"""
 
-
+    random.seed(101)
     # empty list to be filled with numpy arrays
     clean_signal = []
     noise = []
@@ -45,7 +44,7 @@ def MakeSeismic(samples, noise_level=0.3 ):
         # Making events
         mlin, mlinwav = linear2d(x, t, v, t0,theta, amp, wav)
         # Creating noise
-        n = np.random.normal(loc=0,scale=1.0,size=mlinwav.shape)*random.uniform(0.1,0.7)
+        n = np.random.normal(loc=0,scale=1.0,size=mlinwav.shape)*random.uniform(-0.7,0.7)
         s = mlinwav
         # Adding noise
         ns = s+n
@@ -70,10 +69,10 @@ def PlotSeis(data, num=0, save=False):
     fig, axs = plt.subplots(1, len(data), figsize=(12, 5))
     # Looping over datasets to compare
     for j in range(len(data)):
-        axs[j].imshow(data[j][num].T, aspect='auto', interpolation='nearest',
+        # data[j][num]=data[j][num].reshape(128,128)
+        axs[j].imshow(data[j][num].reshape(128,128).T, aspect='auto', interpolation='nearest',
             vmin=-2, vmax=2, cmap='gray',
             extent=(x.min(), x.max(), t.max(), t.min()))
-
     if save:
         file_name = input("file name:")
         plt.savefig('./results/images/%s_start%s.png'%(file_name,start))
