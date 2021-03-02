@@ -130,18 +130,6 @@ def autoencoder(type, start_filters=8, kernel=(3,3)):
 
         model = Model(input_layer,output_layer)
 
-
-    elif type=="ANN":
-        model=Sequential()
-        model.add(Dense(784,activation ='relu',input_shape=(784,)))
-        model.add(Dense(256,activation ='relu'))
-        model.add(Dense(128,activation ='relu'))
-        model.add(Dense(64,activation ='relu'))
-        model.add(Dense(64,activation ='relu'))
-        model.add(Dense(128,activation ='relu'))
-        model.add(Dense(256,activation ='relu'))
-        model.add(Dense(784,activation ='sigmoid'))
-
     elif type == 'upsc':
         model = Sequential()
         model.add(Conv2D(filters = start_filters*1, kernel_size = kernel,padding = 'Same', 
@@ -174,5 +162,57 @@ def autoencoder(type, start_filters=8, kernel=(3,3)):
                         activation ='relu'))
         model.add(UpSampling2D((2,2)))
         model.add(Conv2D(1,(3,3),padding='same'))
-        
+
+    elif type == 'ANN':
+
+        # input_img = Input(shape=(INPUT_SIZE2,))
+
+        input_shape = (256,)
+        input_layer = Input(shape=(input_shape))
+
+        encoded1 = Dense(512, activation='relu')(input_layer)
+        # encoded1 = Dropout(0.5)(encoded1)
+        encoded2 = Dense(256, activation='relu')(encoded1)
+        # encoded2 = Dropout(0.5)(encoded2)
+        encoded3 = Dense(128, activation='relu')(encoded2)
+        # encoded3 = Dropout(0.3)(encoded3)
+
+        decoded1 = Dense(128, activation='relu')(encoded3)
+        # decoded1 = Dropout(0.3)(decoded1)
+        decoded2 = Dense(256, activation='relu')(decoded1)
+        # decoded2 = Dropout(0.5)(decoded2)
+        decoded3 = Dense(512, activation='relu')(decoded2)
+        # decoded3 = Dropout(0.5)(decoded3)
+
+        decoded = Dense(256, activation='linear')(decoded3)
+
+
+        model = Model(input_layer, decoded)
+
+    elif type == 'ANN_dr':
+
+        # input_img = Input(shape=(INPUT_SIZE2,))
+
+        input_shape = (256,)
+        input_layer = Input(shape=(input_shape))
+
+        encoded1 = Dense(512, activation='relu')(input_layer)
+        # encoded1 = Dropout(0.2)(encoded1)
+        encoded2 = Dense(256, activation='relu')(encoded1)
+        # encoded2 = Dropout(0.2)(encoded2)
+        encoded3 = Dense(128, activation='relu')(encoded2)
+        encoded3 = Dropout(0.2)(encoded3)
+
+        decoded1 = Dense(128, activation='relu')(encoded3)
+        decoded1 = Dropout(0.2)(decoded1)
+        decoded2 = Dense(256, activation='relu')(decoded1)
+        # decoded2 = Dropout(0.2)(decoded2)
+        decoded3 = Dense(512, activation='relu')(decoded2)
+        # decoded3 = Dropout(0.2)(decoded3)
+
+        decoded = Dense(256, activation='linear')(decoded3)
+
+
+        model = Model(input_layer, decoded)
+
     return model
