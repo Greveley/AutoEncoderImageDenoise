@@ -57,11 +57,10 @@ def MakeSeismic(samples,img_size=128,freq_low=5,freq_high=30,num_events=6):
         # Making events
         mlin, mlinwav = linear2d(x, t, v, t0,theta, amp, wav)
         # Creating noise
-        n = np.random.normal(loc=0,scale=1.0,size=mlinwav.shape)*random.uniform(-0.5,0.5)
-        s = mlinwav
+        n = np.random.normal(loc=0,scale=0.25,size=(img_size,img_size))       
         # Adding noise
+        s = mlinwav
         ns = s+n
-
         clean_signal.append(s)
         noise.append(n)
         noisy_signal.append(ns)
@@ -72,7 +71,7 @@ def MakeSeismic(samples,img_size=128,freq_low=5,freq_high=30,num_events=6):
     return  np.array(clean_signal).reshape(samples,img_size,img_size,1),np.array(noise).reshape(samples,img_size,img_size,1),np.array(noisy_signal).reshape(samples,img_size,img_size,1)
 
 def PlotSeis(data, num=0, save=False):
-    # print (np.data[0])
+
     size = np.array(data[0]).shape[1]
 
         # Parameters for the seismic canvas
@@ -84,12 +83,16 @@ def PlotSeis(data, num=0, save=False):
     t, t2, x, y = makeaxis(par)
 
     fig, axs = plt.subplots(1, len(data), figsize=(len(data*4), 7))
+
+    vmin = -np.max(data[0][num])
+    vmax = np.max(data[0][num])
     # Looping over datasets to compare
     for j in range(len(data)):
-        # data[j][num]=data[j][num].reshape(128,128)
-        axs[j].imshow(data[j][num].reshape(size,size).T, aspect='auto', interpolation='nearest',
-            vmin=-2, vmax=2, cmap='gray',
-            extent=(x.min(), x.max(), t.max(), t.min()))
+        im = axs[j].imshow(data[j][num].reshape(size,size).T, aspect='auto', interpolation='nearest',
+            vmin=vmin, vmax=vmax, cmap='gray',
+            extent=(x.min(), x.max(), t.max(), t.min())).set_cmap('Greys')
+
+    # fig.colorbar(axs[-1], im)
     if save:
         file_name = input("file name:")
         plt.savefig('./results/images/%s_start%s.png'%(file_name,start))
