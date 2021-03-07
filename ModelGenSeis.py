@@ -3,7 +3,7 @@ from tensorflow.keras.layers import Dense,Conv2D,MaxPool2D,Dropout,UpSampling2D,
 from tensorflow.keras.callbacks import EarlyStopping
 from tensorflow.keras import Model
 
-def autoencoder(type, start_filters=8, kernel=(3,3)):
+def autoencoder(type, start_filters=8, kernel=(3,3),input_size=(128,128,1)):
     """
         Generates a range of Autoencoder models for 2D image denoising
         Type :  UpSc = Uses MaxPooling and Upscaling to generate a simple denoising autoencoder 
@@ -133,35 +133,35 @@ def autoencoder(type, start_filters=8, kernel=(3,3)):
     elif type == 'upsc':
         model = Sequential()
         model.add(Conv2D(filters = start_filters*1, kernel_size = kernel,padding = 'Same', 
-                        activation ='relu',input_shape=(128,128,1)))
+                        activation ='relu',input_shape=input_size))
         model.add(MaxPooling2D(pool_size=(2,2),padding='same'))
-        model.add(Dropout(0.5))
-        model.add(Conv2D(filters = start_filters*2, kernel_size = kernel,padding = 'Same', 
-                        activation ='relu'))
-        model.add(MaxPooling2D(pool_size=(2,2),padding='same'))
-        model.add(Dropout(0.5))
+        # model.add(Dropout(0.5))
         model.add(Conv2D(filters = start_filters*4, kernel_size = kernel,padding = 'Same', 
                         activation ='relu'))
         model.add(MaxPooling2D(pool_size=(2,2),padding='same'))
-        model.add(Dropout(0.5))
+        # model.add(Dropout(0.5))
         model.add(Conv2D(filters = start_filters*8, kernel_size = kernel,padding = 'Same', 
                         activation ='relu'))
         model.add(MaxPooling2D(pool_size=(2,2),padding='same'))
-        model.add(Dropout(0.5))
+        # model.add(Dropout(0.5))
+        # model.add(Conv2D(filters = start_filters*8, kernel_size = kernel,padding = 'Same', 
+        #                 activation ='relu'))
+        # model.add(MaxPooling2D(pool_size=(2,2),padding='same'))
+        # # model.add(Dropout(0.5))
 
+        # model.add(Conv2D(filters = start_filters*8, kernel_size = kernel,padding = 'Same', 
+        #                 activation ='relu'))
+        # model.add(UpSampling2D((2,2)))
         model.add(Conv2D(filters = start_filters*8, kernel_size = kernel,padding = 'Same', 
                         activation ='relu'))
         model.add(UpSampling2D((2,2)))
         model.add(Conv2D(filters = start_filters*4, kernel_size = kernel,padding = 'Same', 
-                        activation ='relu'))
-        model.add(UpSampling2D((2,2)))
-        model.add(Conv2D(filters = start_filters*2, kernel_size = kernel,padding = 'Same', 
                         activation ='relu'))
         model.add(UpSampling2D((2,2)))
         model.add(Conv2D(filters = start_filters*1, kernel_size = kernel,padding = 'Same', 
                         activation ='relu'))
         model.add(UpSampling2D((2,2)))
-        model.add(Conv2D(1,(3,3),padding='same'))
+        model.add(Conv2D(1,(3,3),activation='linear',padding='same'))
 
     elif type == 'ANN':
 
