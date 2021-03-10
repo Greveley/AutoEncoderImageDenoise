@@ -132,20 +132,9 @@ def autoencoder(type, start_filters=8, kernel=(3,3),input_size=(128,128,1)):
         pool2 = MaxPooling2D((2, 2))(conv2)                                                        
         pool2 = Dropout(0.5)(pool2)
 
-        # conv3 = Conv2D(start_filters * 4, kernel, activation="relu", padding="same")(pool2)
-        # conv3 = Conv2D(start_filters * 4, kernel, activation="relu", padding="same")(conv3)
-        # pool3 = MaxPooling2D((2, 2))(conv3)                                                         
-        # pool3 = Dropout(0.5)(pool3)
-
         # # Middle
         convm = Conv2D(start_filters * 16, kernel, activation="relu", padding="same")(pool2)
         convm = Conv2D(start_filters * 16, kernel, activation="relu", padding="same")(convm)
-
-        # deconv3 = Conv2DTranspose(start_filters * 4, kernel, strides=(2,2), padding="same")(convm)
-        # uconv3 = concatenate([deconv3, conv3])
-        # uconv3 = Dropout(0.5)(uconv3)
-        # uconv3 = Conv2D(start_filters * 4, kernel, activation="relu", padding="same")(uconv3)
-        # uconv3 = Conv2D(start_filters * 4, kernel, activation="relu", padding="same")(uconv3)
 
         deconv2 = Conv2DTranspose(start_filters * 4, kernel, strides=(2, 2), padding="same")(convm)
         uconv2 = concatenate([deconv2, conv2])
@@ -209,6 +198,34 @@ def autoencoder(type, start_filters=8, kernel=(3,3),input_size=(128,128,1)):
                         activation ='relu'))
         model.add(UpSampling2D((2,2)))
         model.add(Conv2D(1,(3,3),activation='linear',padding='same'))
+
+
+    elif type == 'upsc_v2_dr':
+        model = Sequential()
+        model.add(Conv2D(filters = start_filters*2, kernel_size = kernel,padding = 'Same', 
+                        activation ='relu',input_shape=input_size))
+        model.add(MaxPooling2D(pool_size=(2,2),padding='same'))
+        model.add(Dropout(0.5))
+        model.add(Conv2D(filters = start_filters*8, kernel_size = kernel,padding = 'Same', 
+                        activation ='relu'))
+        model.add(MaxPooling2D(pool_size=(2,2),padding='same'))
+        model.add(Dropout(0.5))
+        model.add(Conv2D(filters = start_filters*8, kernel_size = kernel,padding = 'Same', 
+                        activation ='relu'))
+        model.add(MaxPooling2D(pool_size=(2,2),padding='same'))
+        # model.add(Dropout(0.5))
+
+        model.add(Conv2D(filters = start_filters*8, kernel_size = kernel,padding = 'Same', 
+                        activation ='relu'))
+        model.add(UpSampling2D((2,2)))
+        model.add(Conv2D(filters = start_filters*8, kernel_size = kernel,padding = 'Same', 
+                        activation ='relu'))
+        model.add(UpSampling2D((2,2)))
+        model.add(Conv2D(filters = start_filters*2, kernel_size = kernel,padding = 'Same', 
+                        activation ='relu'))
+        model.add(UpSampling2D((2,2)))
+        model.add(Conv2D(1,(3,3),activation='linear',padding='same'))
+
 
     elif type == 'ANN':
 

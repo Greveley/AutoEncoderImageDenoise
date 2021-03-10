@@ -1,11 +1,31 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from math import log10
 
 def scale(data):
-    # Scaling the data to be between 0 and 1 since the images we're going to be working with will be grey scale
-    scaled_data = data/np.max(data.values)
-    return scaled_data
+    #Scaling the data between 0 and 1 before it goes into the network
+    scalars = []
+    s1,s2,s3,s4 = data.shape    
+    data = data.reshape(s1*s2,s3,s4)
+    scaled_data = np.zeros_like(data)
+    for i in range(s1*s2):
+        scalars.append(np.max(np.abs(data[i,:,:])))
+        scaled_data[i,:,:] = ((data[i,:,:]/scalars[i])/2)+0.5
+    scaled_data = scaled_data.reshape(s1,s2,s3,s4)
+    return scaled_data, scalars
+
+
+def inv_scale(scaled_data,scalars):
+    s1,s2,s3,s4 = scaled_data.shape   
+    scaled_data = scaled_data.reshape(s1*s2,s3,s4)
+    # returning data to its original amplitude
+    orig_data = np.zeros_like(scaled_data)
+    for i in range(s1):
+        orig_data[i,:,:] = ((scaled_data[i,:,:]-0.5)*2)*scalars[i]
+    
+    orig_data = orig_data.reshape(s1,s2,s3,s4)
+    return orig_data
 
 def add_noise(data, noise_level):
     """Adding gaussian noise to the data
@@ -105,3 +125,41 @@ def windows2img(arr, h, w):
     return (arr.reshape(h//nrows, -1, nrows, ncols)
                .swapaxes(1,2)
                .reshape(h, w))
+
+def PSNR(clean, noisy): 
+    mse = np.mean((clean - noisy) ** 2) 
+    if(mse == 0):  # MSE is zero means no noise is present in the signal . 
+                  # Therefore PSNR have no importance. 
+        return 100
+    max_pixel = np.max(noisy)
+    psnr = 20 * log10(max_pixel / np.sqrt(mse)) 
+    return psnr
+
+def 
+
+def pred_resh(data,output_size,num_wind,wind_size):
+
+    # Reshaping predictions
+    data_resh= data.reshape(int(data.shape[0]/num_wind),num_wind,wind_size,wind_size)
+
+    img = []
+
+    for iImg in range(data_resh.shape[0]):
+        img.append(windows2img(data_resh[iImg],output_size,output_size))
+
+    img = np.array(img)
+
+
+    return img
+
+def inp_resh(data,wind_size):
+
+    # Splitting images into windows to pass through the autoencoder if we're using windows 
+    windows = []
+
+    win_size = 32
+    for iImg in range(data.shape[0]):
+        windows.append(img2windows(data[iImg,:,:,0],win_size,win_size))
+
+    windows = np.array(windows)
+    return windows

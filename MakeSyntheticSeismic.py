@@ -20,7 +20,8 @@ def MakeSeismic(samples,img_size=128,freq_low=5,freq_high=30,num_events=6):
     # Parameters for the seismic canvas
     par = {'ox':0, 'dx':12.5, 'nx':img_size, # offsets
        'ot':0, 'dt':0.004, 'nt':img_size, # time
-       'f0': random.randint(5,30), 'nfmax': 50}
+       'f0': random.randint(5,70), 'nfmax': 50}
+       # initial tests, max freq was 30
     # Make canvas
     t, t2, x, y = makeaxis(par)
     # Make wavelet
@@ -109,9 +110,6 @@ def MakeSeismic_paper(samples,img_size=128,freq_low=5,freq_high=30,num_events=6)
         i +=1
 
     return  np.array(clean_signal).reshape(samples,img_size,img_size,1),np.array(noise).reshape(samples,img_size,img_size,1),np.array(noisy_signal).reshape(samples,img_size,img_size,1)
-
-
-
 
 def PlotSeis(data, num=0, save=False):
 
