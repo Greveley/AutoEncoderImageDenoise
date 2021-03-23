@@ -16,13 +16,15 @@ A number of models have been (and still are being) tested to give optimum result
 * 1D Artificial neural network.
 * 1D Convolutional neural network. 
 ### Fitting models: 
-These models are then fit to the synthetic data to effectively remove the random noise. Optimizer = SGD, loss function = MSE. 
-	
+These models are then fit to the synthetic data to effectively remove the random noise. Optimizer = SGD, loss function = MSE.
+
+![](tmp/Output.pdf)
+
 ## Stage 2: Real Data Training
 The models trained on the synthetic data are then used as a starting point to train on real data. However, the ground truth clean seismic image is not know for the real seismic data. Therefore a psuedo-unsupervised training scheme is implemented by editing the loss function to minimise the correllation coefficient between the input image and the output image. 
 
 
 
 The methodology brings together those found in two papers: 
-*Saad, O. and Chen, Y., 2020. Deep denoising autoencoder for seismic random noise attenuation. GEOPHYSICS, 85(4), pp.V367-V376.
-*Zhang, M., Liu, Y. and Chen, Y., 2019. Unsupervised Seismic Random Noise Attenuation Based on Deep Convolutional Neural Network. IEEE Access, 7, pp.179810-179822
+* Saad, O. and Chen, Y., 2020. Deep denoising autoencoder for seismic random noise attenuation. GEOPHYSICS, 85(4), pp.V367-V376.
+* Zhang, M., Liu, Y. and Chen, Y., 2019. Unsupervised Seismic Random Noise Attenuation Based on Deep Convolutional Neural Network. IEEE Access, 7, pp.179810-179822
