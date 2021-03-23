@@ -1,13 +1,13 @@
 This repo contains code that uses a deep convolutional autoencoder to automatically detect and remove random noise from seismic images. 
 
-## Methodology
+# Methodology
 The methodology consists of 2 stages:
-### Stage 1: Synthetic Data Training
-  Generate Data:
-  Synthetic seismograms of a random number of seismic events are generated using a ricker wavelet. Random characteristics of these seismic events include: 
-    - Frequency (between 10 and 70Hz) 
-    - Angle (beween +/- 50 degrees)
-    - Amplitude (between +/- 2)
+## Stage 1: Synthetic Data Training
+### Generate Data:
+Synthetic seismograms of a random number of seismic events are generated using a ricker wavelet. Random characteristics of these seismic events include: 
+    * Frequency (between 10 and 70Hz) 
+    * Angle (beween +/- 50 degrees)
+    * Amplitude (between +/- 2)
 
   These seismograms are the target output of the network. A random level of Gaussian noise is then added to the clean seismic data; this dataset is the input to the network. 
 	
