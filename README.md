@@ -18,7 +18,7 @@ A number of models have been (and still are being) tested to give optimum result
 ### Fitting models: 
 These models are then fit to the synthetic data to effectively remove the random noise. Optimizer = SGD, loss function = MSE.
 
-![](tmp/Output.pdf)
+![](https://github.com/Greveley/AutoEncoderImageDenoise/blob/master/tmp/Output.png)
 
 ## Stage 2: Real Data Training
 The models trained on the synthetic data are then used as a starting point to train on real data. However, the ground truth clean seismic image is not know for the real seismic data. Therefore a psuedo-unsupervised training scheme is implemented by editing the loss function to minimise the correllation coefficient between the input image and the output image. 
