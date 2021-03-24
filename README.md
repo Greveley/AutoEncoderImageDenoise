@@ -30,8 +30,9 @@ The models trained on the synthetic data are then used as a starting point to tr
 Above shows two zoomed sections of the input seismic data, output of the denoising process and the removed noise. 
 
 ## Known Issues
-As can be seen in the images there are some artifacts remaining in the output image due to window edge effects. These can me removed by implementing an overlapping window approach which has not been done yet. 
+As can be seen in the images there are some artifacts remaining in the output image due to window edge effects. I think these can be removed by implementing an overlapping window approach which has not been done yet. 
 
+There is noise still left within the data that I think could be removed by refining this method. In particular, some more hyperparameter tuning of batchsize, window size and possibly the optimizer. 
 
 
 The methodology brings together those found in two papers: 
