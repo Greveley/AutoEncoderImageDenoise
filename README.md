@@ -36,6 +36,7 @@ There is noise still left within the data that I think could be removed by refin
 
 Having observed results in the other papers I'm sure that the ones I'm getting can be improved. But this was initially meant as a PoC so improvements can be made!
 
+Real seismic data displayed here can be found here: https://walrus.wr.usgs.gov/namss/
 
 The methodology brings together those found in two papers: 
 * Saad, O. and Chen, Y., 2020. Deep denoising autoencoder for seismic random noise attenuation. GEOPHYSICS, 85(4), pp.V367-V376.
