@@ -34,6 +34,8 @@ As can be seen in the images there are some artifacts remaining in the output im
 
 There is noise still left within the data that I think could be removed by refining this method. In particular, some more hyperparameter tuning of batchsize, window size and possibly the optimizer. 
 
+Having observed results in the other papers I'm sure that the ones I'm getting can be improved. But this was initially meant as a PoC so improvements can be made!
+
 
 The methodology brings together those found in two papers: 
 * Saad, O. and Chen, Y., 2020. Deep denoising autoencoder for seismic random noise attenuation. GEOPHYSICS, 85(4), pp.V367-V376.
