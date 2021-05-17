@@ -1,6 +1,6 @@
 import numpy as np 
 import matplotlib.pyplot as plt 
-from pylops.utils.seismicevents import makeaxis, linear2d
+from pylops.utils.seismicevents import makeaxis, linear2d, hyperbolic2d
 from pylops.utils.wavelets import ricker
 import random
 from skimage.util import random_noise
@@ -35,28 +35,53 @@ def MakeSeismic_VN(samples,img_size=256,num_events=10):
     amp_range = 2
     i = 0
     amp_lim = 0.8
+    lv = 1500
+    hv = 5000
     while i < samples: 
-        iEv = 0
-        t0 = []
-        theta = []
-        amp = []
-        while iEv <= num_events:
+        iEv_l = 0
+        iEv_h = 0
+        t0_l = []
+        t0_h = []
+        theta_l = []
+        amp_l = []
+        amp_h = []
+        vel_h = []
+        num_lin = random.randint(2,num_events)
+        num_hyp = num_events-num_lin
+        while iEv_l <= num_lin:
             # Time of events
-            t0.append(random.uniform(t.min(),t.max())*0.7) 
+            t0_l.append(random.uniform(t.min(),t.max())*0.7) 
             # Angle of events
-            theta.append(random.uniform(-ang_range,ang_range))
+            theta_l.append(random.uniform(-ang_range,ang_range))
             # Amplitude of events
-            amp.append(random.uniform(-amp_range,amp_range))
+            amp_l.append(random.uniform(-amp_range,amp_range))
             # clipping events to be above -0.2 and 0.2 
-            if amp[iEv]<0:
-                amp[iEv] = np.min([-amp_lim,amp[iEv]])
+            if amp_l[iEv_l]<0:
+                amp_l[iEv_l] = np.min([-amp_lim,amp_l[iEv_l]])
             else: 
-                amp[iEv] = np.max([amp_lim,amp[iEv]])
-            iEv+=1
+                amp_l[iEv_l] = np.max([amp_lim,amp_l[iEv_l]])
+            iEv_l+=1
+        while iEv_h <= num_hyp:
+            # Time of events
+            t0_h.append(random.uniform(t.min(),t.max())*0.7) 
+            # Amplitude of events
+            amp_h.append(random.uniform(-amp_range,amp_range))
+            # velocity of hyperbolic events
+            vel_h.append(random.uniform(lv,hv))
+            # clipping events to be above -0.2 and 0.2 
+            if amp_h[iEv_h]<0:
+                amp_h[iEv_h] = np.min([-amp_lim,amp_h[iEv_h]])
+            else: 
+                amp_h[iEv_h] = np.max([amp_lim,amp_h[iEv_h]])
+            iEv_h+=1
         
         # Making events
-        mlin, mlinwav = linear2d(x, t, v, t0,theta, amp, wav)
-        s = mlinwav
+        mlin, mlinwav = linear2d(x, t, v, t0_l,theta_l, amp_l, wav)
+        # print (t0_h, vel_h, amp_h)
+        # Generate model
+        m, mwav = hyperbolic2d(x, t, t0_h, vel_h, amp_h, wav)
+        s = mwav+mlinwav
+
          # Creating and adding noise
         ns1 = random_noise(s,'speckle',clip=False,var=random.uniform(0.2,2))
         ns2 = random_noise(s,'gaussian',clip=False,var=random.uniform(0.05,0.5))
@@ -119,7 +144,6 @@ def MakeSeismic_VN_dip(samples,img_size=256,num_events=10):
         theta = []
         amp = []
         ang = random.uniform(-ang_range,ang_range)
-
         while iEv <= num_events:
             # Time of events
             t0.append(random.uniform(t.min(),t.max())*0.7) 
