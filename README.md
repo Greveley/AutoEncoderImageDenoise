@@ -23,15 +23,13 @@ These models are then fit to the synthetic data to effectively remove the random
 ## Stage 2: Real Data Training
 The models trained on the synthetic data are then used as a starting point to train on real data. However, the ground truth clean seismic image is not know for the real seismic data. Therefore a psuedo-unsupervised training scheme is implemented by editing the loss function to minimise the correllation coefficient between the input image and the output image. 
 
-![](https://github.com/Greveley/AutoEncoderImageDenoise/blob/master/tmp/ROutput.png)
-![](https://github.com/Greveley/AutoEncoderImageDenoise/blob/master/tmp/ROutputZm.png)
+![](https://github.com/Greveley/AutoEncoderImageDenoise/blob/master/tmp/img1.png)
+![](https://github.com/Greveley/AutoEncoderImageDenoise/blob/master/tmp/img2.png)
 
 
 Above shows two zoomed sections of the input seismic data, output of the denoising process and the removed noise. 
 
 ## Known Issues
-As can be seen in the images there are some artifacts remaining in the output image due to window edge effects. I think these can be removed by implementing an overlapping window approach which has not been done yet. 
-
 There is noise still left within the data that I think could be removed by refining this method. In particular, some more hyperparameter tuning of batchsize, window size and possibly the optimizer. 
 
 Having observed results in the other papers I'm sure that the ones I'm getting can be improved. But this was initially meant as a PoC so improvements can be made!
