@@ -11,8 +11,8 @@ Synthetic seismograms of a random number of seismic events are generated using a
 These seismograms are the target output of the network. A random level of Gaussian noise is then added to the clean seismic data; this dataset is the input to the network. 
 ### Model generation: 
 A number of models have been (and still are being) tested to give optimum results. These models include: 
-* Convolutional autoencoders applied over windows of the input images.
-* Unet architecture model. (so far this model gives the best results)
+* Convolutional autoencoders applied over windows of the input images. *** results shown below from this model type ***
+* Unet architecture model. 
 * 1D Artificial neural network.
 * 1D Convolutional neural network. 
 ### Fitting models: 
